@@ -1,5 +1,3 @@
-import pandas as pd
-import plotly.express as px
 import streamlit as st
 from lifelines import KaplanMeierFitter
 
@@ -31,12 +29,6 @@ measure_parameters = {
     },
 }
 
-# Streamlit selectbox inputs
-dataset = st.selectbox('Dataset', datasets, disabled=True)
-measure = st.selectbox('Category', measure_parameters.keys())
-
-# Load DataFrame
-data_frame = pd.read_csv('2010.csv', index_col=0)
 
 def prepare_survival_dataframe(df, group_condition, label):
     """Prepares a survival function DataFrame based on a group condition and a label."""
@@ -49,7 +41,7 @@ def prepare_survival_dataframe(df, group_condition, label):
     survival_function['Time (months)'] = survival_function.index
     return survival_function
 
-def update_fig(df, measure_params):
+def build_plot(df, measure_params):
     """Updates the figure based on the chosen measure parameters."""
     group_condition = measure_params['group_condition'](df)
     labels = measure_params['labels']
@@ -61,16 +53,3 @@ def update_fig(df, measure_params):
         survival_df_group2 = prepare_survival_dataframe(df, ~group_condition, labels[1])
         survival_df = pd.concat([survival_df_group1, survival_df_group2])
     return survival_df
-
-# Update figure based on chosen measure
-survival_df = update_fig(data_frame, measure_parameters[measure])
-
-# Create and display plot
-fig = px.line(
-    survival_df,
-    x="Time (months)",
-    y="Survival",
-    color='Category',
-    hover_name="Survival",
-)
-st.plotly_chart(fig, theme="streamlit", use_container_width=True)
