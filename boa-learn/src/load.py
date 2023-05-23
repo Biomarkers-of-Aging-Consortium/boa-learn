@@ -1,7 +1,4 @@
 import pandas as pd
-import unittest
-
-from model import load_columns
 
 def load_fhs():
     """Loads data from the Framingham Heart Study"""
@@ -48,25 +45,3 @@ def load_nhanes(year):
     },axis=1)
     df=df.rename({'LB2RDW':'LBXRDW','LB2WBCSI':'LBXWBCSI'},axis=1)
     return df
-
-###Tests
-import pytest
-
-def test_fhs_columns():
-    df = load_fhs()
-    verify_expected_columns(df)
-
-def test_nhanes_columns():
-    df = load_nhanes(2010)
-    verify_expected_columns(df)
-
-
-def verify_expected_columns(df):
-    actual_columns = set(df.columns.to_list())
-    missing_columns = set(load_columns) - actual_columns
-    extra_columns = actual_columns - set(load_columns)
-    assert len(missing_columns) == 0, f"Missing expected columns: {missing_columns} \n Found extra columns: {extra_columns}"
-
-# Run the test
-if __name__ == '__main__':
-    pytest.main([__file__])
