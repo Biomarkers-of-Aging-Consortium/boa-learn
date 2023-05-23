@@ -4,8 +4,7 @@ from lifelines import KaplanMeierFitter
 # Initialize Kaplan Meier Fitter
 kmf = KaplanMeierFitter()
 
-# Predefined datasets and measures
-datasets = ['National Health and Nutrition Examination Survey','Framingham Heart Study','UK Biobank','Mass General Biobank']
+# Predefined measures
 measure_parameters = {
     'None': {
         'column': None,
@@ -13,18 +12,18 @@ measure_parameters = {
         'labels': ['None']
     },
     'Gender': {
-        'column': 'RIAGENDR',
-        'group_condition': lambda df: df['RIAGENDR'] == 1,
+        'column': 'sex',
+        'group_condition': lambda df: df['sex'] == 1,
         'labels': ['Male', 'Female']
     },
     'Blood glucose': {
-        'column': 'LBDGLUSI',
-        'group_condition': lambda df: df['LBDGLUSI'] < 5.5,
+        'column': 'glucose',
+        'group_condition': lambda df: df['glucose'] < 5.5,
         'labels': ['Low Glucose', 'High Glucose']
     },
     'Biological Age': {
-        'column': 'Biological Age',
-        'group_condition': lambda df: df['Biological Age'] == 0,
+        'column': 'biologically_older',
+        'group_condition': lambda df: df['biologically_older'] == 0,
         'labels': ['Biologically younger', 'Biologically older']
     },
 }
@@ -32,8 +31,8 @@ measure_parameters = {
 
 def prepare_survival_dataframe(df, group_condition, label):
     """Prepares a survival function DataFrame based on a group condition and a label."""
-    time_to_event = df.PERMTH_EXM
-    event_occurred = df.MORTSTAT
+    time_to_event = df.months_until_death
+    event_occurred = df.is_dead
     kmf.fit(time_to_event[group_condition], event_occurred[group_condition], label=label)
     survival_function = kmf.survival_function_
     survival_function.columns = ['Survival']

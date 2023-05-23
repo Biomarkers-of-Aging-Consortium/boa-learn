@@ -2,14 +2,25 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-import plot
+import boa_learn.plot
+
+# Predefined data sources
+datasets = {
+    'National Health and Nutrition Examination Survey': {
+        'file':'nhanes-2010.csv'
+    },
+    'Framingham Heart Study': {
+        'file':'fhs-2010.csv'
+    }
+}
 
 # Streamlit selectbox inputs
-dataset = st.selectbox('Dataset', plot.datasets, disabled=True)
+datasets = ['National Health and Nutrition Examination Survey','Framingham Heart Study']
+dataset = st.selectbox('Dataset', plot.datasets.keys)
 measure = st.selectbox('Category', plot.measure_parameters.keys())
 
 # Load DataFrame
-data_frame = pd.read_csv('2010.csv', index_col=0)
+data_frame = pd.read_csv(datasets[dataset]['file'], index_col=0)
 
 # Update figure based on chosen measure
 survival_df = plot.build_plot(data_frame, plot.measure_parameters[measure])

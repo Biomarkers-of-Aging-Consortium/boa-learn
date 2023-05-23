@@ -7,7 +7,7 @@ name = "pypi"
 plotly = "*"
 lifelines = "*"
 streamlit = "*"
-boa-learn = {path = "./../boa-learn"}
+boa_learn = {path = "./../boa-learn"}
 
 [dev-packages]
 
