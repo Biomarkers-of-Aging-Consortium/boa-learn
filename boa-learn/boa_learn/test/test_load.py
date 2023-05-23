@@ -1,5 +1,5 @@
-from src import load
-from src.model import load_columns
+from boa_learn import load
+from boa_learn.model import load_columns
 import pytest
 
 def test_fhs_columns():

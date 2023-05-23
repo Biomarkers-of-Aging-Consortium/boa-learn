@@ -1,4 +1,4 @@
-import streamlit as st
+import pandas as pd
 from lifelines import KaplanMeierFitter
 
 # Initialize Kaplan Meier Fitter

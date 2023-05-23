@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-import boa_learn.plot
+from boa_learn import plot
 
 # Predefined data sources
 datasets = {
@@ -15,8 +15,7 @@ datasets = {
 }
 
 # Streamlit selectbox inputs
-datasets = ['National Health and Nutrition Examination Survey','Framingham Heart Study']
-dataset = st.selectbox('Dataset', plot.datasets.keys)
+dataset = st.selectbox('Dataset', datasets.keys())
 measure = st.selectbox('Category', plot.measure_parameters.keys())
 
 # Load DataFrame

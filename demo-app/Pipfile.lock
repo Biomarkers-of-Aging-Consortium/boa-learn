@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2d670519605420bd3d57221242f1af8fcbd32c472acc9928b664c9d5b06dd331"
+            "sha256": "e34c6d1686e66f39ee5e874bab82db05501b2275f0a1df1942a49a6548b3811b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -84,8 +84,8 @@
             "version": "==1.6.2"
         },
         "boa-learn": {
-            "path": "./../boa-learn",
-            "version": "==0.1"
+            "editable": true,
+            "path": "./../boa-learn"
         },
         "cachetools": {
             "hashes": [
@@ -674,7 +674,7 @@
                 "sha256:f25e23a03f7ad7211ffa30cb181c3e5f6d96a8e4cb22898af462a7333f8a74eb",
                 "sha256:fe7914d8ddb2d54b900cec264c090b88d141a1eed605c9539a187dbc2547f022"
             ],
-            "markers": "python_version >= '3.8'",
+            "index": "pypi",
             "version": "==2.0.1"
         },
         "pillow": {

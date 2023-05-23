@@ -1,5 +1,7 @@
 import pandas as pd
 
+MG_PER_DL_TO_MMOL_PER_L=0.05551
+
 def load_fhs():
     """Loads data from the Framingham Heart Study"""
     public_link='https://raw.githubusercontent.com/singator/bdah/master/data/frmgham2.csv'
@@ -7,6 +9,7 @@ def load_fhs():
     df=df[df['PERIOD']==1].drop('PERIOD',axis=1)
     df['TIMEDTH']=df['TIMEDTH']/30.437 # days to months
     df.index.name = 'id'
+
     df=df.rename({
         'AGE': 'age',
         'SEX': 'sex',
@@ -14,6 +17,10 @@ def load_fhs():
         'DEATH': 'is_dead',
         'TIMEDTH': 'months_until_death'
     },axis=1)
+    
+    #standardize glucose units
+    df['glucose'] = df['glucose'].apply(lambda g: g * MG_PER_DL_TO_MMOL_PER_L)
+    
     return df
 
 def load_nhanes(year):
