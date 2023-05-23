@@ -1,4 +1,4 @@
 notebooks/*.csv
 notebooks/.ipynb_checkpoints/*
-boa_learn/build/**
-**/__pycache__
+**/build/*
+**/__pycache__/*
