@@ -34,7 +34,6 @@ def load_nhanes(year):
     gluc_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/GLU_{suffix}.XPT'
     cbc_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CBC_{suffix}.XPT'
     bioc_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/BIOPRO_{suffix}.XPT'
-    crp_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CRP_{suffix}.XPT'
     mortality_path=f'https://ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality/NHANES_{year-1}_{year}_MORT_2019_PUBLIC.dat'
     dem=pd.read_sas(dem_path,index='SEQN')[['RIAGENDR','RIDAGEYR']]
     dem.index=dem.index.astype(int)
@@ -44,13 +43,11 @@ def load_nhanes(year):
     cbc.index=cbc.index.astype(int)
     bioc=pd.read_sas(bioc_path,index='SEQN')[['LBDSALSI','LBDSCRSI','LBXSAPSI']]
     bioc.index=bioc.index.astype(int)
-    crp=pd.read_sas(crp_path,index='SEQN')['LBXCRP']
-    crp.index=crp.index.astype(int)
     mort=pd.read_fwf(mortality_path,index_col=0,header=None,widths=[14,1,1,3,1,1,1,4,8,8,3,3])
     mort.index=mort.index.rename('SEQN')
     dead=mort[mort[1]==1][[2,10]].astype(int)
     dead.columns=['MORTSTAT','PERMTH_EXM']
-    df=pd.concat([dem,gluc,cbc,bioc,crp,dead],axis=1).dropna()
+    df=pd.concat([dem,gluc,cbc,bioc,dead],axis=1).dropna()
     df.index.name = 'id'
     df=df.rename({
         'RIDAGEYR': 'age',
