@@ -32,7 +32,7 @@ jobs:
     - name: Check Formatting
       run: |
         cd boa-learn
-        pipenv run black --check
+        pipenv run black . --check
 
     - name: Test with pytest
       run: |
