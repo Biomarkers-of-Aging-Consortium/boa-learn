@@ -29,6 +29,11 @@ jobs:
         cd boa-learn
         pipenv install --dev
 
+    - name: Check Formatting
+      run: |
+        cd boa-learn
+        pipenv run black . --check
+
     - name: Test with pytest
       run: |
         cd boa-learn
