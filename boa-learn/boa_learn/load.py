@@ -8,6 +8,7 @@ import appdirs
 
 MG_PER_DL_TO_MMOL_PER_L = 0.05551
 
+
 def cached_dowload(url):
     """Downloads the file at a URL and saves it locally. If called again with the same URL it will use the saved file. Returns the local filepath"""
     # Hash the URL to create a unique filename
@@ -32,11 +33,12 @@ def cached_dowload(url):
         response.raise_for_status()  # Raise an HTTPError if one occurred
 
         # If the file is not downloaded yet, download and save it
-        with open(filepath, 'wb') as out_file:
+        with open(filepath, "wb") as out_file:
             shutil.copyfileobj(response.raw, out_file)
 
         # Return the file path
         return filepath
+
 
 def load_fhs():
     """Loads data from the Framingham Heart Study"""
@@ -87,22 +89,34 @@ def load_nhanes(year):
             f"Unknown year {year}. Can only load for known available years {known_nhanes_year_suffix.keys}"
         )
     suffix = known_nhanes_year_suffix[year]
-    dem_file = cached_dowload(f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/DEMO_{suffix}.XPT")
-    gluc_file = cached_dowload(f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/GLU_{suffix}.XPT")
-    cbc_file = cached_dowload(f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CBC_{suffix}.XPT")
-    bioc_file = cached_dowload(f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/BIOPRO_{suffix}.XPT")
-    mortality_file = cached_dowload(f"https://ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality/NHANES_{year-1}_{year}_MORT_2019_PUBLIC.dat")
-    crp_file=cached_dowload(f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CRP_{suffix}.XPT')
+    dem_file = cached_dowload(
+        f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/DEMO_{suffix}.XPT"
+    )
+    gluc_file = cached_dowload(
+        f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/GLU_{suffix}.XPT"
+    )
+    cbc_file = cached_dowload(
+        f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CBC_{suffix}.XPT"
+    )
+    bioc_file = cached_dowload(
+        f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/BIOPRO_{suffix}.XPT"
+    )
+    mortality_file = cached_dowload(
+        f"https://ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality/NHANES_{year-1}_{year}_MORT_2019_PUBLIC.dat"
+    )
+    crp_file = cached_dowload(
+        f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CRP_{suffix}.XPT"
+    )
     dem = pd.read_sas(dem_file, index="SEQN")[["RIAGENDR", "RIDAGEYR"]]
     dem.index = dem.index.astype(int)
     gluc = pd.read_sas(gluc_file, index="SEQN")["LBDGLUSI"]
     gluc.index = gluc.index.astype(int)
     cbc = pd.read_sas(cbc_file, index="SEQN")[cbc_sub]
     cbc.index = cbc.index.astype(int)
-    #clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
+    # clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
     if year == 2010:
-        crp=pd.read_sas(crp_file,index='SEQN')['LBXCRP']
-        crp.index=crp.index.astype(int)
+        crp = pd.read_sas(crp_file, index="SEQN")["LBXCRP"]
+        crp.index = crp.index.astype(int)
     bioc = pd.read_sas(bioc_file, index="SEQN")[["LBDSALSI", "LBDSCRSI", "LBXSAPSI"]]
     bioc.index = bioc.index.astype(int)
     mort = pd.read_fwf(
@@ -114,7 +128,7 @@ def load_nhanes(year):
     mort.index = mort.index.rename("SEQN")
     dead = mort[mort[1] == 1][[2, 10]].astype(int)
     dead.columns = ["MORTSTAT", "PERMTH_EXM"]
-    #clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
+    # clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
     if year == 2010:
         df = pd.concat([dem, gluc, cbc, crp, bioc, dead], axis=1).dropna()
     else:

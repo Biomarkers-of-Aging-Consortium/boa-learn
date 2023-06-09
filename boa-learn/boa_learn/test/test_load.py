@@ -25,6 +25,7 @@ def verify_expected_columns(df):
         len(missing_columns) == 0
     ), f"Missing expected columns: {missing_columns} \n Found extra columns: {extra_columns}"
 
+
 # Run the test
 if __name__ == "__main__":
     pytest.main([__file__])
