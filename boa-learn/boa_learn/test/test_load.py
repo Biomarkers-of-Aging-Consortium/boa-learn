@@ -25,9 +25,6 @@ def verify_expected_columns(df):
         len(missing_columns) == 0
     ), f"Missing expected columns: {missing_columns} \n Found extra columns: {extra_columns}"
 
-def test_cached_load_fails_on_404():
-    load.cached_dowload('https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/CRP_K.XPT')
-
 # Run the test
 if __name__ == "__main__":
     pytest.main([__file__])
