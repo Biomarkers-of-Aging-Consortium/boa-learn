@@ -8,6 +8,8 @@ plotly = "*"
 lifelines = "*"
 scikit-learn = "*"
 pandas = "*"
+requests = "*"
+appdirs = "*"
 
 [dev-packages]
 pytest = "*"
