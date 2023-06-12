@@ -19,7 +19,7 @@ def test_can_load_nhanes_2012():
 def test_can_load_dnam():
     df = load.load_dnam()
     #Verify data set is of known size 
-    assert(df.shape == (27579, 540))
+    assert(df.shape == (540, 27579))
 
 def verify_expected_columns(df):
     actual_columns = set(df.columns.to_list())

@@ -149,5 +149,12 @@ def load_nhanes(year):
 
 def load_dnam():
     dnam_file=cached_dowload('https://ftp.ncbi.nlm.nih.gov/geo/series/GSE19nnn/GSE19711/matrix/GSE19711_series_matrix.txt.gz')
-    dnam=pd.read_table(dnam_file,index_col=0,skiprows=74)
+    #Row 31 contains IDs, row 41 contains age
+    dnam=pd.read_table(dnam_file,index_col=0, skiprows=lambda x: x != 40 and x != 30 and x < 75)
+    #Each row should be a person
+    dnam = dnam.transpose()
+    #Age data is in the form "ageatrecruitment: 61" need to extract numberical age
+    dnam['age'] = dnam['!Sample_characteristics_ch1'].str[-2:].astype(int)
+    dnam = dnam.drop(['!Sample_characteristics_ch1', '!series_matrix_table_end'], axis=1)
+    dnam.index.name = "id"
     return dnam
