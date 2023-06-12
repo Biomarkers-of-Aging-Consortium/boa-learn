@@ -25,7 +25,7 @@ def load_fhs():
 
 def load_nhanes(year):
     """Loads data from the National Health and Nutrition Examination Survey"""
-    cbc_sub=['LBXRDW','LBXWBCSI','LBXLYPCT','LBXMCVSI','LBDLYMNO','LBXRBCSI','LBXHGB','LBXPLTSI']
+    cbc_sub=['LBXRDW','LBXWBCSI','LBXLYPCT','LBXMCVSI','LBDLYMNO','LBXRBCSI','LBXHGB','LBXPLTSI','LBXMCHSI','LBXBAPCT']
     known_nhanes_year_suffix = {2010 : 'F', 2012 : 'G'}
     if not known_nhanes_year_suffix[year]:
         raise ValueError(f'Unknown year {year}. Can only load for known available years {known_nhanes_year_suffix.keys}')
@@ -35,6 +35,7 @@ def load_nhanes(year):
     cbc_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CBC_{suffix}.XPT'
     bioc_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/BIOPRO_{suffix}.XPT'
     crp_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CRP_{suffix}.XPT'
+    hdl_path=f'https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/HDL_{suffix}.XPT'
     mortality_path=f'https://ftp.cdc.gov/pub/Health_Statistics/NCHS/datalinkage/linked_mortality/NHANES_{year-1}_{year}_MORT_2019_PUBLIC.dat'
     dem=pd.read_sas(dem_path,index='SEQN')[['RIAGENDR','RIDAGEYR']]
     dem.index=dem.index.astype(int)
@@ -46,11 +47,13 @@ def load_nhanes(year):
     bioc.index=bioc.index.astype(int)
     crp=pd.read_sas(crp_path,index='SEQN')['LBXCRP']
     crp.index=crp.index.astype(int)
+    hdl=pd.read_sas(hdl_path,index='SEQN')['LBDHDDSI']
+    hdl.index=hdl.index.astype(int)
     mort=pd.read_fwf(mortality_path,index_col=0,header=None,widths=[14,1,1,3,1,1,1,4,8,8,3,3])
     mort.index=mort.index.rename('SEQN')
     dead=mort[mort[1]==1][[2,10]].astype(int)
     dead.columns=['MORTSTAT','PERMTH_EXM']
-    df=pd.concat([dem,gluc,cbc,bioc,crp,dead],axis=1).dropna()
+    df=pd.concat([dem,gluc,cbc,bioc,crp,hdl,dead],axis=1).dropna()
     df.index.name = 'id'
     df=df.rename({
         'RIDAGEYR': 'age',
