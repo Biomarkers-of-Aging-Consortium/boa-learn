@@ -146,3 +146,8 @@ def load_nhanes(year):
     )
     df = df.rename({"LB2RDW": "LBXRDW", "LB2WBCSI": "LBXWBCSI"}, axis=1)
     return df
+
+def load_dnam():
+    dnam_file=cached_dowload('https://ftp.ncbi.nlm.nih.gov/geo/series/GSE19nnn/GSE19711/matrix/GSE19711_series_matrix.txt.gz')
+    dnam=pd.read_table(dnam_file,index_col=0,skiprows=74)
+    return dnam
