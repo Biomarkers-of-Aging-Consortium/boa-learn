@@ -17,12 +17,14 @@ def test_nhanes_columns():
 def test_can_load_nhanes_2012():
     df = load.load_nhanes(2012)
 
+
 def test_can_load_dnam():
     df = load.load_dnam()
-    #Verify data set is of known size 
-    assert(df.shape == (540, 27579))
-    assert('age' in df.columns.to_list())
-    assert(all(np.issubdtype(df[col].dtype, np.number) for col in df.columns))
+    # Verify data set is of known size
+    assert df.shape == (540, 27579)
+    assert "age" in df.columns.to_list()
+    assert all(np.issubdtype(df[col].dtype, np.number) for col in df.columns)
+
 
 def verify_expected_columns(df):
     actual_columns = set(df.columns.to_list())

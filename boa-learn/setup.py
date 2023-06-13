@@ -9,7 +9,9 @@ setup(
     author="Seth Paulson",
     author_email="sarudak@gmail.com",
     package_data={
-        'boa_learn': ['data/*'],  # All CSV files in the data subdirectory of your_package
+        "boa_learn": [
+            "data/*"
+        ],  # All CSV files in the data subdirectory of your_package
     },
     packages=["boa_learn"],
 )
