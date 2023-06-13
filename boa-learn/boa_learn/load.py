@@ -156,5 +156,8 @@ def load_dnam():
     #Age data is in the form "ageatrecruitment: 61" need to extract numberical age
     dnam['age'] = dnam['!Sample_characteristics_ch1'].str[-2:].astype(int)
     dnam = dnam.drop(['!Sample_characteristics_ch1', '!series_matrix_table_end'], axis=1)
+    #Ensure all data columns are correctly numeric
+    data_columns = dnam.columns[dnam.columns != 'index']
+    dnam[data_columns] = dnam[data_columns].apply(pd.to_numeric, errors='coerce')
     dnam.index.name = "id"
     return dnam
