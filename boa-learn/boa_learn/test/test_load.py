@@ -1,6 +1,7 @@
 from boa_learn import load
 from boa_learn.model import load_columns
 import pytest
+import numpy as np
 
 
 def test_fhs_columns():
@@ -20,6 +21,8 @@ def test_can_load_dnam():
     df = load.load_dnam()
     #Verify data set is of known size 
     assert(df.shape == (540, 27579))
+    assert('age' in df.columns.to_list())
+    assert(all(np.issubdtype(df[col].dtype, np.number) for col in df.columns))
 
 def verify_expected_columns(df):
     actual_columns = set(df.columns.to_list())
