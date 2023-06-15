@@ -21,7 +21,7 @@ def test_can_load_nhanes_2012():
 def test_can_load_dnam():
     url = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE41nnn/GSE41169/matrix/GSE41169_series_matrix.txt.gz"
     df = load.load_dnam(
-        dnam_file=url, id_row=32, age_row=46, skiprows=72, nrows=1
+        dnam_file=url, id_row=32, age_row=46, skiprows=72
     )  # nrows=1 to make it faster
     # Verify data set is of known size
     # assert df.shape == (540, 27579) need to be more general
