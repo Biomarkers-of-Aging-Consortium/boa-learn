@@ -82,6 +82,8 @@ def load_nhanes(year):
         "LBXRBCSI",
         "LBXHGB",
         "LBXPLTSI",
+        "LBXMCHSI",
+        "LBXBAPCT"
     ]
     known_nhanes_year_suffix = {2010: "F", 2012: "G"}
     if not known_nhanes_year_suffix[year]:
@@ -107,12 +109,17 @@ def load_nhanes(year):
     crp_file = cached_dowload(
         f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/CRP_{suffix}.XPT"
     )
+    hdl_file = cached_dowload(
+        f"https://wwwn.cdc.gov/Nchs/Nhanes/{year-1}-{year}/HDL_{suffix}.XPT"
+    )
     dem = pd.read_sas(dem_file, index="SEQN")[["RIAGENDR", "RIDAGEYR"]]
     dem.index = dem.index.astype(int)
     gluc = pd.read_sas(gluc_file, index="SEQN")["LBDGLUSI"]
     gluc.index = gluc.index.astype(int)
     cbc = pd.read_sas(cbc_file, index="SEQN")[cbc_sub]
     cbc.index = cbc.index.astype(int)
+    hdl=pd.read_sas(hdl_path,index='SEQN')['LBDHDDSI']
+    hdl.index=hdl.index.astype(int)    
     # clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
     if year == 2010:
         crp = pd.read_sas(crp_file, index="SEQN")["LBXCRP"]
@@ -130,9 +137,9 @@ def load_nhanes(year):
     dead.columns = ["MORTSTAT", "PERMTH_EXM"]
     # clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
     if year == 2010:
-        df = pd.concat([dem, gluc, cbc, crp, bioc, dead], axis=1).dropna()
+        df = pd.concat([dem, gluc, cbc, crp, bioc, hdl, dead], axis=1).dropna()
     else:
-        df = pd.concat([dem, gluc, cbc, bioc, dead], axis=1).dropna()
+        df = pd.concat([dem, gluc, cbc, bioc, hdl, dead], axis=1).dropna()
     df.index.name = "id"
     df = df.rename(
         {
