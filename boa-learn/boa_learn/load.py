@@ -155,11 +155,14 @@ def load_nhanes(year):
     return df
 
 
-def load_dnam(dnam_file, id_row, age_row, skiprows):
+def load_dnam(dnam_file, id_row, age_row, skiprows, nrows):
     dnam_file = cached_dowload(dnam_file)
     # Row id_row+1 contains IDs, row age_row+1 contains age
     ages = pd.read_table(
-        dnam_file, index_col=0, skiprows=lambda x: x != age_row and x != id_row
+        dnam_file,
+        index_col=0,
+        skiprows=lambda x: x != age_row and x != id_row,
+        nrows=nrows,
     ).transpose()
     # Each row should be a person
     dnam = pd.read_table(dnam_file, index_col=0, skiprows=skiprows).transpose()
