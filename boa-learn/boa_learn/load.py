@@ -83,7 +83,7 @@ def load_nhanes(year):
         "LBXHGB",
         "LBXPLTSI",
         "LBXMCHSI",
-        "LBXBAPCT"
+        "LBXBAPCT",
     ]
     known_nhanes_year_suffix = {2010: "F", 2012: "G"}
     if not known_nhanes_year_suffix[year]:
@@ -118,8 +118,8 @@ def load_nhanes(year):
     gluc.index = gluc.index.astype(int)
     cbc = pd.read_sas(cbc_file, index="SEQN")[cbc_sub]
     cbc.index = cbc.index.astype(int)
-    hdl=pd.read_sas(hdl_path,index='SEQN')['LBDHDDSI']
-    hdl.index=hdl.index.astype(int)    
+    hdl = pd.read_sas(hdl_path, index="SEQN")["LBDHDDSI"]
+    hdl.index = hdl.index.astype(int)
     # clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
     if year == 2010:
         crp = pd.read_sas(crp_file, index="SEQN")["LBXCRP"]
@@ -155,10 +155,8 @@ def load_nhanes(year):
     return df
 
 
-def load_dnam(dnam_file,id_row,age_row,skiprows):
-    dnam_file = cached_dowload(
-        dnam_file
-    )
+def load_dnam(dnam_file, id_row, age_row, skiprows):
+    dnam_file = cached_dowload(dnam_file)
     # Row id_row+1 contains IDs, row age_row+1 contains age
     ages = pd.read_table(
         dnam_file, index_col=0, skiprows=lambda x: x != age_row and x != id_row

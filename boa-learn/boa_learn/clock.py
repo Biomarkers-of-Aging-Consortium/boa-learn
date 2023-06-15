@@ -24,6 +24,7 @@ def horvath_clock(dataframe):
     df_sum = methylation_df.drop("CoefficientTraining", axis=1).sum()
     return df_sum.apply(horvath_function).to_frame(name="biological_age")
 
+
 def hannum_clock(dataframe):
     script_dir = os.path.dirname(__file__)  # get the directory of the current script
     data_file_path = os.path.join(
