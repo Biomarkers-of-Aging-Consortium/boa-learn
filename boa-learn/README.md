@@ -33,9 +33,13 @@ Bio-learn is a library for working with [biomarkers](https://en.wikipedia.org/wi
 
     ```
     git clone https://github.com/Biomarkers-of-Aging-Consortium/bio-learn
-    cd Project-Name
+    cd bio-learn
     ```
-1. Install project dependencies:
+1. Navigate to library directory
+    ```
+    cd boa-learn
+    ```
+2. Install project dependencies:
 
     ```
     pipenv install --dev
