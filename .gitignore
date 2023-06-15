@@ -1,5 +1,6 @@
 notebooks/*.csv
-.ipynb_checkpoints
+**/.ipynb_checkpoints/*
 **/build/*
 **/__pycache__/*
 **/*.egg-info/*
+**/.DS_Store/*

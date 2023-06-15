@@ -8,9 +8,13 @@ plotly = "*"
 lifelines = "*"
 scikit-learn = "*"
 pandas = "*"
+requests = "*"
+appdirs = "*"
 
 [dev-packages]
 pytest = "*"
+black = "*"
+jupyter = "*"
 
 [requires]
 python_version = "3.8"
