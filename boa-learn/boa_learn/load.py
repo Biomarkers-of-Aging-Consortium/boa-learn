@@ -83,7 +83,7 @@ def load_nhanes(year):
         "LBXHGB",
         "LBXPLTSI",
         "LBXMCHSI",
-        "LBXBAPCT"
+        "LBXBAPCT",
     ]
     known_nhanes_year_suffix = {2010: "F", 2012: "G"}
     if not known_nhanes_year_suffix[year]:
@@ -118,8 +118,8 @@ def load_nhanes(year):
     gluc.index = gluc.index.astype(int)
     cbc = pd.read_sas(cbc_file, index="SEQN")[cbc_sub]
     cbc.index = cbc.index.astype(int)
-    hdl=pd.read_sas(hdl_path,index='SEQN')['LBDHDDSI']
-    hdl.index=hdl.index.astype(int)    
+    hdl = pd.read_sas(hdl_file, index="SEQN")["LBDHDDSI"]
+    hdl.index = hdl.index.astype(int)
     # clumsy hack since 2012 doesn't have the CRP data. Will remove pending refactor of loading code
     if year == 2010:
         crp = pd.read_sas(crp_file, index="SEQN")["LBXCRP"]
@@ -168,8 +168,5 @@ def load_dnam():
     # Age data is in the form "ageatrecruitment: 61" need to extract numberical age
     dnam["age"] = ages["!Sample_characteristics_ch1"].str[-2:].astype(int)
     dnam = dnam.drop(["!series_matrix_table_end"], axis=1)
-    # Ensure all data columns are correctly numeric
-    # data_columns = dnam.columns[dnam.columns != 'index']
-    # dnam[data_columns] = dnam[data_columns].apply(pd.to_numeric, errors='coerce')
     dnam.index.name = "id"
     return dnam
