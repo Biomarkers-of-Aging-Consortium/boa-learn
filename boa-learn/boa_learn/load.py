@@ -155,17 +155,18 @@ def load_nhanes(year):
     return df
 
 
-def load_dnam(dnam_file, id_row, age_row, skiprows, nrows):
+def load_dnam(dnam_file, id_row, age_row, skiprows, nrows=500000):
     dnam_file = cached_dowload(dnam_file)
     # Row id_row+1 contains IDs, row age_row+1 contains age
     ages = pd.read_table(
         dnam_file,
         index_col=0,
         skiprows=lambda x: x != age_row and x != id_row,
-        nrows=nrows,
     ).transpose()
     # Each row should be a person
-    dnam = pd.read_table(dnam_file, index_col=0, skiprows=skiprows).transpose()
+    dnam = pd.read_table(
+        dnam_file, index_col=0, skiprows=skiprows, nrows=nrows
+    ).transpose()
     # Age data is in the form "ageatrecruitment: 61" need to extract numberical age
     dnam["age"] = ages["!Sample_characteristics_ch1"].str[-2:].astype(int)
     dnam = dnam.drop(["!series_matrix_table_end"], axis=1)
