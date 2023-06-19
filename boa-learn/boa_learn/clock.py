@@ -13,8 +13,10 @@ def phenoage_transform(mult_sum):
     BA = mult_sum + const
     return BA
 
+
 def no_transform(_):
     return _
+
 
 def run_clock(dataframe, coeffecient_file, transform_function):
     script_dir = os.path.dirname(__file__)  # get the directory of the current script
@@ -31,14 +33,18 @@ def run_clock(dataframe, coeffecient_file, transform_function):
     df_sum = methylation_df.drop("CoefficientTraining", axis=1).sum()
     return df_sum.apply(transform_function).to_frame(name="biological_age")
 
+
 def horvath_clock(dataframe):
     return run_clock(dataframe, "horvath.csv", horvath_transform)
+
 
 def hannum_clock(dataframe):
     return run_clock(dataframe, "hannum.csv", no_transform)
 
+
 def phenoage_clock(dataframe):
     return run_clock(dataframe, "phenoage.csv", phenoage_transform)
 
+
 def single_sample_clock(clock_function, data):
-    return clock_function(data).iloc[0,0]
+    return clock_function(data).iloc[0, 0]
