@@ -1,4 +1,3 @@
-import importlib.resources
 import os
 import pandas as pd
 
@@ -13,6 +12,9 @@ def phenoage_function(mult_sum):
     const = 60.664
     BA = mult_sum + const
     return BA
+
+def no_transform(_):
+    return _
 
 
 def horvath_clock(dataframe):
@@ -61,3 +63,6 @@ def phenoage_clock(dataframe):
         methylation_df[c] = methylation_df["CoefficientTraining"] * methylation_df[c]
     df_sum = methylation_df.drop("CoefficientTraining", axis=1).sum()
     return df_sum.apply(phenoage_function).to_frame(name="biological_age")
+
+def single_sample_clock(clock_function, data):
+    return clock_function(data).iloc[0,0]
