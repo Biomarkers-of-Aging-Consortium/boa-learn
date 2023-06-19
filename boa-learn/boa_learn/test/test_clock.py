@@ -30,3 +30,7 @@ def test_phenoage():
     expected = 61.09
     actual = clock.single_sample_clock(clock.phenoage_clock, sample_data.transpose())
     assert(isclose(actual, expected, abs_tol=1e-2))
+
+# Run the test
+if __name__ == "__main__":
+    pytest.main([__file__])
